@@ -14,7 +14,7 @@ import re
 
 
 class Step1Form(forms.Form):
-    name = forms.CharField(help_text='The name of the database and the user. This will be prefixed with the VM name')
+    name = forms.CharField(help_text='The name of the database and the user.')
     password = forms.CharField(widget=forms.PasswordInput(), required=False, help_text='Leave blank to generate a random password')
     save_in_notes = forms.BooleanField(help_text='Check this to save the password in the server\'s note')
     server = forms.ModelChoiceField(queryset=Server.objects.exclude(ssh_connection_string_from_gestion=None).order_by('name'))
@@ -43,7 +43,7 @@ class CreateMysqlTable(_Wizard):
 
     def save_step_1(self, form):
         server = Server.objects.get(pk=form.cleaned_data['server'].pk)
-        name = re.sub('[\W_]+', '', server.name) + '_' + form.cleaned_data['name']
+        name = form.cleaned_data['name']
         server_pk = form.cleaned_data['server'].pk
         password = form.cleaned_data['password']
         save_in_notes = form.cleaned_data['save_in_notes']
