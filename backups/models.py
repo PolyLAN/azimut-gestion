@@ -1,6 +1,7 @@
 from django.db import models
 
 from servers.models import Server
+from django.utils import timezone
 
 
 class Backup(models.Model):
@@ -42,3 +43,58 @@ class BackupRun(models.Model):
         from django.utils import timezone
         import datetime
         return (self.end_date + datetime.timedelta(days=3)) > timezone.now()
+
+
+class BackupSetOfRun(models.Model):
+
+    TYPE_CHOICES = (
+        ('hourly', 'Hourly'),
+        ('daily', 'Daily'),
+        ('weekly', 'Weekly'),
+        ('monthly', 'Monthly'),
+    )
+
+    type = models.CharField(max_length=16, choices=TYPE_CHOICES)
+
+    STATUS_CHOICES = (
+        ('running', 'Running'),
+        ('done', 'Done'),
+        ('canceled', 'Cancelled'),
+    )
+
+    status = models.CharField(max_length=16, choices=STATUS_CHOICES, default='running')
+
+    start_date = models.DateTimeField(auto_now_add=True)
+    end_date = models.DateTimeField(blank=True, null=True)
+
+    backupruns = models.ManyToManyField(BackupRun)
+    backups = models.ManyToManyField(Backup)
+
+    total_size = models.BigIntegerField(default=0)
+    total_files = models.BigIntegerField(default=0)
+
+    def get_status_label(self):
+        VALUES = {'running': 'warning', 'done': 'success', 'canceled': 'important'}
+
+        if self.status in VALUES:
+            return VALUES[self.status]
+        else:
+            return 'important'
+
+    def get_total_time(self):
+        if not self.end_date:
+            end_date = timezone.now()
+        else:
+            end_date = self.end_date
+
+        return int((end_date - self.start_date).total_seconds() / 36.0) / 100.0
+
+    def get_total_time_label(self):
+
+        tt = self.get_total_time()
+
+        if tt < 3.5:
+            return 'success'
+        if tt < 4.0:
+            return 'warning'
+        return 'important'
