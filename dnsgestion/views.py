@@ -256,7 +256,7 @@ def generate_zone_file(request, pk, secret):
 
 $TTL %s
 
-%s. IN SOA %s %s (
+%s. IN SOA %s %s. (
     %s  \t; Serial
     %s  \t\t\t; Refresh
     %s  \t\t\t; Retry
