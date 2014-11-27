@@ -18,6 +18,9 @@ from django.contrib import messages
 
 from servers.models import Server, ServerUser
 
+import json
+import string
+
 
 @login_required
 def home(request):
@@ -70,3 +73,37 @@ def get_keys(request, server, user):
                 ssh_keys.append(key.key)
 
     return render_to_response('keymanager/get_keys.html', {'ssh_keys': ssh_keys}, context_instance=RequestContext(request))
+
+
+def get_keys_2(request, server):
+    """Return all user, with group, with keys, for a server"""
+
+    server = get_object_or_404(Server, keymanger_name=server)
+
+    retour = {}
+
+    groups = []
+
+    for g in server.groupwithaccess_set.all():
+        if g not in groups:
+            groups.append(g)
+
+    def san(u):
+        return filter(lambda x: x in string.ascii_lowercase + string.digits + '_', u.lower())
+
+    for g in groups:
+        for user in g.users.all():
+            retour['user_%s' % (user.pk,)] = {
+                'login': san(user.username),
+                'keys': '\n'.join([key.key for key in user.sshkey_set.all()]),
+                'groups': [san(group.name) for group in user.group_set.all()]
+            }
+
+        for server in g.servers.all():
+            retour['server_%s' % (server.pk,)] = {
+                'login': san('srv_%s' % (server.name, )),
+                'keys': '\n'.join([key.key for key in server.sshkey_set.all()]),
+                'groups': ['servers']
+            }
+
+    return json.dumps({'data': retour})

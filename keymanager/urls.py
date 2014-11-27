@@ -8,5 +8,6 @@ urlpatterns = patterns(
 
     url(r'^$', 'home'),
     url(r'^servers/getKeys/(?P<server>.*)/(?P<user>.*)/$', 'get_keys'),
+    url(r'^servers/getKeys/(?P<server>.*)/$', 'get_keys_2'),
 
 )
