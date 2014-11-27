@@ -106,4 +106,4 @@ def get_keys_2(request, server):
                 'groups': ['servers']
             }
 
-    return json.dumps({'data': retour})
+    return HttpResponse(json.dumps({'data': retour}))
