@@ -36,7 +36,7 @@ def run_backup(id, mode='hourly', backupsetpk=None):
         _notify_set_if_needed()
         return
 
-    os.system('ssh ' + backup.server_to.ssh_connection_string_from_gestion + ' wget ' + settings.GESTION_URL + 'backups/get_conf/' + str(backup.pk) + '/ -O /tmp/azimut-gestion-backup-config-' + str(backup.pk))
+    os.system('ssh -o BatchMode=yes ' + backup.server_to.ssh_connection_string_from_gestion + ' wget ' + settings.GESTION_URL + 'backups/get_conf/' + str(backup.pk) + '/ -O /tmp/azimut-gestion-backup-config-' + str(backup.pk))
 
     to_do_string = ['rsnapshot -c /tmp/azimut-gestion-backup-config-' + str(backup.pk) + ' -v ' + mode]
 
