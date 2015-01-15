@@ -157,7 +157,7 @@ cmd_cp\t/bin/cp
 
 use_lazy_deletes\t1
 
-ssh_args\t""" + ssh_args + """
+ssh_args\t""" + ssh_args + """ -o BatchMode=yes
 rsync_long_args\t--delete --numeric-ids --relative --delete-excluded --stats""" + excludes + """
 
 backup\t""" + cox + ':' + backup.folder_from + """\t.
