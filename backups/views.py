@@ -147,7 +147,7 @@ cmd_rm\t/bin/rm
 cmd_logger\t/usr/bin/logger
 cmd_du\t/usr/bin/du
 
-retain\thourly\t6
+retain\thourly\t2
 retain\tdaily\t7
 retain\tweekly\t7
 retain\tmonthly\t3
