@@ -6,6 +6,9 @@
 {% block title %}Port forwawrding{% endblock %}
 
 {% block content %}
+	<div class="alert alert-danger">
+		Cette feature ne marche plus.
+	</div>
 
 	<h3>{{object.server_host.external_ip}}:{{object.port_from}} --> {{object.server_to.internal_ip}}:{{object.port_to}}</h3>
 

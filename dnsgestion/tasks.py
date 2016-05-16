@@ -9,6 +9,8 @@ from django.conf import settings
 def update_dns(pk):
     """Update all server with taskforwarding info"""
 
+    return False
+
     server = Server.objects.get(pk=pk)
 
     os.system('ssh ' + server.ssh_connection_string_from_gestion + ' wget ' + settings.GESTION_URL + 'dns/config/' + str(server.pk) + '/main/' + settings.DNS_SECRET + ' -O /etc/bind/named.conf.gestion')

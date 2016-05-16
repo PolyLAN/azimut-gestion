@@ -6,6 +6,9 @@
 {% block title %}Hostname forwarding{% endblock %}
 
 {% block content %}
+	<div class="alert alert-danger">
+		Cette feature ne marche plus.
+	</div>
 
 	<h3>{{object.domain}}:{{object.port_from}} --> {{object.server_to.internal_ip}}:{{object.port_to}}</h3>
 
